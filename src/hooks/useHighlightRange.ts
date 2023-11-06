@@ -3,15 +3,16 @@ import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { wrapHighLight } from "@/painter/highlight";
 import { getSelectedNodes } from "@/painter";
-export default function () {
+import { HighlightRange } from "@/types";
+const useHighlightRange = (): [HighlightRange | null, () => void] => {
   const [range, setRange] = useAtom(rangeAtom);
   const highlightRange = () => {
     const selection = window.getSelection();
     if (selection && !selection.isCollapsed) {
       const selectedRange = selection.getRangeAt(0);
       setRange({
-        start: { node: selectedRange.startContainer },
-        end: { node: selectedRange.endContainer },
+        start: { $node: selectedRange.startContainer },
+        end: { $node: selectedRange.endContainer },
       });
     }
   };
@@ -29,4 +30,6 @@ export default function () {
   }, [range?.id]);
 
   return [range, highlightRange];
-}
+};
+
+export default useHighlightRange;
